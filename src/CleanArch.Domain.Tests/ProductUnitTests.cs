@@ -102,28 +102,33 @@ namespace CleanArch.Domain.Tests
             action.Should().Throw<DomainExceptionValidations>().WithMessage("Invalid stock. Stock can not be lower than 0.");
         }
 
-        [Fact(DisplayName = "Create product with missing image value.")]
-        public void CreateProduct_MissingImageValue_DomainExceptionInvalidMissingImage()
-        {
-            Action action = () => new Product(1, "Product name", "Product description", 5, 10, "          ");
-
-            action.Should().Throw<DomainExceptionValidations>().WithMessage("Invalid image. Image is required.");
-        }
-
-        [Fact(DisplayName = "Create product with null image value.")]
-        public void CreateProduct_NullImageValue_DomainExceptionInvalidNullImage()
-        {
-            Action action = () => new Product(1, "Product name", "Product description", 5, 10, null);
-
-            action.Should().Throw<DomainExceptionValidations>().WithMessage("Invalid image. Image is required.");
-        }
-
         [Fact(DisplayName = "Create product with too long image value.")]
         public void CreateProduct_LongImageValue_DomainExceptionInvalidLongImage()
         {
             Action action = () => new Product(1, "Product name", "Product description", 5, 10, "01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567891");
 
             action.Should().Throw<DomainExceptionValidations>().WithMessage("Invalid image. Image max length is 250.");
+        }
+
+        [Fact]
+        public void CreateProduct_WithNullImageName_NoDomainException()
+        {
+            Action action = () => new Product(1, "Product Name", "Product Description", 9.99m, 99, null);
+            action.Should().NotThrow<DomainExceptionValidations>();
+        }
+
+        [Fact]
+        public void CreateProduct_WithNullImageName_NoNullReferenceException()
+        {
+            Action action = () => new Product(1, "Product Name", "Product Description", 9.99m, 99, null);
+            action.Should().NotThrow<NullReferenceException>();
+        }
+
+        [Fact]
+        public void CreateProduct_WithEmptyImageName_NoDomainException()
+        {
+            Action action = () => new Product(1, "Product Name", "Product Description", 9.99m, 99, "");
+            action.Should().NotThrow<DomainExceptionValidations>();
         }
     }
 }

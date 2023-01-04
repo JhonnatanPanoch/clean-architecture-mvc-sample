@@ -8,7 +8,7 @@ namespace CleanArch.Domain.Entities
         public string Description { get; private set; }
         public decimal Price { get; private set; }
         public int Stock { get; private set; }
-        public string Image { get; private set; }
+        public string? Image { get; private set; }
 
         public int CategoryId { get; set; }
         public Category Category { get; set; }
@@ -44,7 +44,7 @@ namespace CleanArch.Domain.Entities
             string description,
             decimal price,
             int stock,
-            string image)
+            string? image)
         {
             ValidateModel(
                 name, 
@@ -92,7 +92,7 @@ namespace CleanArch.Domain.Entities
             string description,
             decimal price,
             int stock,
-            string image)
+            string? image)
         {
             DomainExceptionValidations.When(
                 string.IsNullOrWhiteSpace(name), 
@@ -119,11 +119,7 @@ namespace CleanArch.Domain.Entities
                "Invalid stock. Stock can not be lower than 0.");
 
             DomainExceptionValidations.When(
-                string.IsNullOrWhiteSpace(image),
-                "Invalid image. Image is required.");
-
-            DomainExceptionValidations.When(
-                image.Length > 250,
+                image?.Length > 250,
                 "Invalid image. Image max length is 250.");
         }
 
